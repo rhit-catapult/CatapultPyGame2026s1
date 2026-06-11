@@ -5,14 +5,17 @@ import random  # Note this!
 
 
 class Raindrop:
-    def __init__(self, screen, x, y):
+    def __init__(self, screen: pygame.Surface, x: int, y: int):
         """ Creates a Raindrop sprite that travels down at a random speed. """
-        # TODO 8: Initialize this Raindrop, as follows:
+        # Done 8: Initialize this Raindrop, as follows:
         #     - Store the screen.
         #     - Set the initial position of the Raindrop to x and y.
         #     - Set the initial speed to a random integer between 5 and 15.
         #   Use instance variables:   screen  x  y  speed.
-        pass
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.speed = random.randint(5, 15)
 
     def move(self):
         """ Move the self.y value of the Raindrop down the screen (y increase) at the self.speed. """
@@ -27,9 +30,9 @@ class Raindrop:
 
     def draw(self):
         """ Draws this sprite onto the screen. """
-        # TODO 9: Draw a vertical line that is 5 pixels long, 2 pixels thick,
+        # Done 9: Draw a vertical line that is 5 pixels long, 2 pixels thick,
         #      from the current position of this Raindrop (use either a black or blue color).
-        pass
+        pygame.draw.line(self.screen, (0, 0, 150), (self.x, self.y), (self.x, self.y + 5), 2)
 
 
 class Hero:
@@ -88,16 +91,29 @@ class Cloud:
 
 def main():
     """ Main game loop that creates the sprite objects, controls interactions, and draw the screen. """
-    # TODO 1: Initialize the game, display a caption, and set   screen   to a 1000x600 Screen.
+    print("main is called!")
+    # Done 1: Initialize the game, display a caption, and set   screen   to a 1000x600 Screen.
+    pygame.init()
+    screen = pygame.display.set_mode((1000, 600))
+    pygame.display.set_caption("Rainy Day")
 
-    # TODO 2: Make a Clock
-    # TODO 7: As a temporary test, make a new Raindrop called test_drop at x=320 y=10
+
+    # Done 2: Make a Clock
+    clock = pygame.time.Clock()
+    # Done 7: As a temporary test, make a new Raindrop called test_drop at x=320 y=10
+    test_drop = Raindrop(screen, 320, 10)
     # TODO 15: Make a Hero, named mike, with appropriate images, starting at position x=200 y=400.
     # TODO 15: Make a Hero, named alyssa, with appropriate images, starting at position x=700 y=400.
     # TODO 23: Make a Cloud, named cloud, with appropriate images, starting at position x=300 y=50.
 
-    # TODO 3: Enter the game loop, with a clock tick of 60 (or so) at each iteration.
-        # TODO 4:   Make the pygame.QUIT event stop the game.
+    while True:
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+    # Done 3: Enter the game loop, with a clock tick of 60 (or so) at each iteration.
+        # Done 4:   Make the pygame.QUIT event stop the game.
 
         # TODO 27: Inside the game loop (AFTER the events loop above), get the list of keys that are currently pressed.
         #     Arrange so that the Cloud moves:
@@ -108,12 +124,14 @@ def main():
         # DISCUSS: If you want something to happen once per key press, put it in the events loop above
         #          If you want something to continually happen while holding the key, put it after the events loop.
 
-        # TODO 5: Inside the game loop, draw the screen (fill with white)
+        # Done 5: Inside the game loop, draw the screen (fill with white)
+        screen.fill(pygame.Color("White"))
 
         # --- begin area of test_drop code that will be removed later
         # TODO 12: As a temporary test, move test_drop
         # TODO 14: As a temporary test, check if test_drop is off screen, if so reset the y position to 10
-        # TODO 10: As a temporary test, draw test_drop
+        # Done 10: As a temporary test, draw test_drop
+        test_drop.draw()
 
         # TODO 20: As a temporary test, check if test_drop is hitting Mike (or Alyssa), if so set their last_hit_time
         # TODO 22: Remove the code that reset the y of the test_drop when off_screen()
@@ -133,8 +151,9 @@ def main():
 
         # TODO 18: Draw the Heroes (Mike and Alyssa)
 
-        # TODO 6: Update the display and remove the pass statement below
-    pass
+        # Done 6: Update the display and remove the pass statement below
+        pygame.display.update()
 
 
-# TODO 0: Call main.
+# Done 0: Call main.
+main()
