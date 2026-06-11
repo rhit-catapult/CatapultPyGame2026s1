@@ -74,21 +74,25 @@ class Hero:
     
 
 class Cloud:
-    def __init__(self, screen, x, y, image_filename):
+    def __init__(self, screen: pygame.Surface, x, y, image_filename):
         """ Creates a Cloud sprite that will produce Raindrop objects.  The cloud will be moving around. """
-        # TODO 24: Initialize this Cloud, as follows:
+        # Done 24: Initialize this Cloud, as follows:
         #     - Store the screen.
         #     - Set the initial position of this Cloud to x and y.
         #     - Set the image of this Cloud to the given image filename.
         #     - Create a list for Raindrop objects as an empty list called raindrops.
         #   Use instance variables:
         #      screen  x  y  image   raindrops.
-        pass
+        self.screen = screen
+        self.x = x
+        self.y = y
+        self.image = pygame.image.load(image_filename)
+        self.raindrops = []
 
     def draw(self):
         """ Draws this sprite onto the screen. """
-        # TODO 25: Draw (blit) this Cloud's image at its current position.
-        pass
+        # Done 25: Draw (blit) this Cloud's image at its current position.
+        self.screen.blit(self.image, (self.x, self.y))
 
     def rain(self):
         """ Adds a Raindrop to the array of raindrops so that it looks like the Cloud is raining. """
@@ -111,7 +115,8 @@ def main():
     mike = Hero(screen, 200, 400, "Mike_umbrella.png", "Mike.png")
     alyssa = Hero(screen, 700, 400, "Alyssa_umbrella.png", "Alyssa.png")
 
-    # TODO 23: Make a Cloud, named cloud, with appropriate images, starting at position x=300 y=50.
+    # Done 23: Make a Cloud, named cloud, with appropriate images, starting at position x=300 y=50.
+    cloud = Cloud(screen, 300, 50, "cloud.png")
 
     while True:
         clock.tick(60)
@@ -135,7 +140,8 @@ def main():
         screen.fill(pygame.Color("White"))
 
 
-        # TODO 26: Draw the Cloud.
+        # Done 26: Draw the Cloud.
+        cloud.draw()
 
         # TODO 29: Remove the temporary testdrop code from this function and refactor it as follows:
         # TODO: Make the Cloud "rain", then:
