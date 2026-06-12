@@ -2,76 +2,8 @@ import pygame
 import sys
 import time  # Note this!
 import random  # Note this!
+import raindrop_module
 
-
-class Raindrop:
-    def __init__(self, screen: pygame.Surface, x: int, y: int):
-        """ Creates a Raindrop sprite that travels down at a random speed. """
-        # Done 8: Initialize this Raindrop, as follows:
-        #     - Store the screen.
-        #     - Set the initial position of the Raindrop to x and y.
-        #     - Set the initial speed to a random integer between 5 and 15.
-        #   Use instance variables:   screen  x  y  speed.
-        self.screen = screen
-        self.x = x
-        self.y = y
-        self.speed = random.randint(5, 15)
-
-    def move(self):
-        """ Move the self.y value of the Raindrop down the screen (y increase) at the self.speed. """
-        # Done 11: Change the  y  position of this Raindrop by its speed.
-        self.y += self.speed
-
-    def off_screen(self):
-        """ Returns true if the Raindrop y value is not shown on the screen, otherwise false. """
-        # Note: this will be used for testing, but not used in the final version of the code for the sake of simplicity.
-        # Done 13: Return  True  if the  y  position of this Raindrop is greater than 800.
-        return self.y > self.screen.get_height()
-
-    def draw(self):
-        """ Draws this sprite onto the screen. """
-        # Done 9: Draw a vertical line that is 5 pixels long, 2 pixels thick,
-        #      from the current position of this Raindrop (use either a black or blue color).
-        pygame.draw.line(self.screen, (0, 0, 150), (self.x, self.y), (self.x, self.y + 5), 2)
-
-
-class Hero:
-    def __init__(self, screen: pygame.Surface, x, y, with_umbrella_filename, without_umbrella_filename):
-        """ Creates a Hero sprite (Mike) that does not move. If hit by rain he'll put up his umbrella. """
-        # Done 16: Initialize this Hero, as follows:
-        #     - Store the screen.
-        #     - Set the initial position of this Hero to x and y.
-        #     - Create an image of this Hero WITH    an umbrella to the given with_umbrella_filename.
-        #     - Create an image of this Hero WITHOUT an umbrella to the given without_umbrella_filename.
-        #     - Set the "last hit time" to 0.
-        #   Use instance variables:
-        #      screen  x  y  image_umbrella   image_no_umbrella  last_hit_time.
-        self.screen = screen
-        self.x = x
-        self.y = y
-        self.image_umbrella = pygame.image.load(with_umbrella_filename)
-        self.image_no_umbrella = pygame.image.load(without_umbrella_filename)
-        self.last_hit_time = 0
-
-    def draw(self):
-        """ Draws this sprite onto the screen. """
-        # Done 17: Draw (blit) this Hero, at this Hero's position, WITHOUT an umbrella:
-        # Done 21: Instead draw (blit) this Hero, at this Hero's position, as follows:
-        #     If the current time is greater than this Hero's last_hit_time + 1,
-        #       draw this Hero WITHOUT an umbrella,
-        #       otherwise draw this Hero WITH an umbrella.
-        if time.time() > self.last_hit_time + 1:
-            self.screen.blit(self.image_no_umbrella, (self.x, self.y))
-        else:
-            self.screen.blit(self.image_umbrella, (self.x, self.y))
-
-    def hit_by(self, raindrop):
-        """ Returns true if the given raindrop is hitting this Hero, otherwise false. """
-        # Done 19: Return True if this Hero is currently colliding with the given Raindrop.
-        my_hit_box = pygame.Rect(self.x, self.y,
-                                 self.image_no_umbrella.get_width(), self.image_no_umbrella.get_height())
-        return my_hit_box.collidepoint(raindrop.x, raindrop.y + 5)
-    
 
 class Cloud:
     def __init__(self, screen: pygame.Surface, x, y, image_filename):
@@ -101,25 +33,21 @@ class Cloud:
         #       - x is a random integer between this Cloud's x and this Cloud's x + 300.
         #       - y is this Cloud's y + 100.
         for k in range(20):
-            new_raindrop = Raindrop(self.screen,
+            new_raindrop = raindrop_module.Raindrop(self.screen,
                                     random.randint(self.x + 10, self.x + self.image.get_width() - 10),
                                     self.y + self.image.get_height() - 10)
             self.raindrops.append(new_raindrop)
 
 
 def main():
+
     """ Main game loop that creates the sprite objects, controls interactions, and draw the screen. """
     print("main is called!")
     # Done 1: Initialize the game, display a caption, and set   screen   to a 1000x600 Screen.
     pygame.init()
     screen = pygame.display.set_mode((1000, 600))
-    pygame.display.set_caption("Rainy Day")
+    pygame.display.set_caption("Cloud Module test environment")
     clock = pygame.time.Clock()
-
-    mike = Hero(screen, 200, 400, "Mike_umbrella.png", "Mike.png")
-    alyssa = Hero(screen, 700, 400, "Alyssa_umbrella.png", "Alyssa.png")
-
-    # Done 23: Make a Cloud, named cloud, with appropriate images, starting at position x=300 y=50.
     cloud = Cloud(screen, 300, 50, "cloud.png")
 
     while True:
@@ -165,24 +93,13 @@ def main():
         for raindrop in cloud.raindrops:
             raindrop.move()
             raindrop.draw()
-            if mike.hit_by(raindrop):
-                mike.last_hit_time = time.time()
-                cloud.raindrops.remove(raindrop)
-            if alyssa.hit_by(raindrop):
-                alyssa.last_hit_time = time.time()
-                cloud.raindrops.remove(raindrop)
             if raindrop.off_screen():
                 cloud.raindrops.remove(raindrop)
-
-
-
-        # Done 18: Draw the Heroes (Mike and Alyssa)
-        mike.draw()
-        alyssa.draw()
 
         # Done 6: Update the display and remove the pass statement below
         pygame.display.update()
 
 
-# Done 0: Call main.
-main()
+if __name__ == "__main__":
+    main()
+    
